@@ -1,58 +1,54 @@
-<div dir="rtl">
+# Tailor Mate (قياساتي)
 
-# قياساتي (Tailor Mate)
+A Flutter app that helps tailors record their customers' measurements, organize them, and search them quickly. It has a full Arabic (RTL) interface and works offline.
 
-تطبيق فلاتر يساعد الخياط على تسجيل قياسات عملائه وتنظيمها والبحث فيها بسهولة، بواجهة عربية كاملة (RTL) ويعمل بدون إنترنت.
+## Screenshots
 
-## لقطات من التطبيق
-
-| الشاشة الرئيسية | القائمة الجانبية | نموذج القياسات |
+| Home | Drawer | Measurement form |
 | :---: | :---: | :---: |
 | <img src="screenshots/home.png" width="220"> | <img src="screenshots/drawer.png" width="220"> | <img src="screenshots/form.png" width="220"> |
 
-| الإعدادات | الوضع الداكن |
+| Settings | Dark mode |
 | :---: | :---: |
 | <img src="screenshots/settings.png" width="220"> | <img src="screenshots/dark.png" width="220"> |
 
-## المميزات
+## Features
 
-- إضافة وتعديل سجلات العملاء مع القياسات حسب نوع القطعة.
-- بحث سريع بالاسم أو رقم الهاتف.
-- سلة محذوفات: حذف ناعم مع إمكانية الاستعادة أو التراجع.
-- تصدير واستيراد البيانات عبر ملفات إكسل (مع تجاهل السجلات المكررة).
-- وضع فاتح وداكن.
-- قائمة جانبية فيها سلة المحذوفات والإعدادات وتواصل معنا ومن نحن.
-- تخزين محلي على الجهاز باستخدام SQLite.
+- Add and edit customer records with measurements per garment type.
+- Quick search by name or phone number.
+- Trash: soft delete with restore and undo.
+- Export and import data as Excel files (duplicates are skipped on import).
+- Light and dark themes.
+- Side drawer with Trash, Settings, Contact us, and About.
+- Local storage on the device using SQLite.
 
-## التقنيات المستخدمة
+## Tech stack
 
-- [Flutter](https://flutter.dev) و Material 3
-- `sqflite` لقاعدة البيانات المحلية
-- `shared_preferences` لحفظ إعدادات المظهر
-- `excel` و `file_picker` للتصدير والاستيراد
-- `url_launcher` لفتح الروابط
-- `intl` و `flutter_localizations` للتعريب
+- [Flutter](https://flutter.dev) with Material 3
+- `sqflite` for the local database
+- `shared_preferences` for theme settings
+- `excel` and `file_picker` for export and import
+- `url_launcher` for opening links
+- `intl` and `flutter_localizations` for localization
 
-## هيكل المشروع
+## Project structure
 
 ```
 lib/
-├── data/       قاعدة البيانات (database_helper.dart)
-├── models/     نماذج البيانات (سجل القياسات، أنواع القطع)
-├── screens/    الشاشات (الرئيسية، النموذج، الإعدادات، المحذوفات)
-├── services/   خدمات (إكسل، إدارة الثيم)
-└── main.dart   نقطة البداية
+├── data/       Database (database_helper.dart)
+├── models/     Data models (measurement record, garment types)
+├── screens/    Screens (home, record form, settings, trash)
+├── services/   Services (Excel, theme controller)
+└── main.dart   Entry point
 ```
 
-## التشغيل
+## Getting started
 
 ```bash
 flutter pub get
 flutter run
 ```
 
-## الترخيص
+## License
 
-لم يُحدَّد ترخيص للمشروع بعد.
-
-</div>
+No license has been specified yet.
