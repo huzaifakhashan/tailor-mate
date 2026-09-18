@@ -9,7 +9,7 @@ class DatabaseHelper {
 
   static final DatabaseHelper instance = DatabaseHelper._internal();
 
-  static const _dbName = String.fromEnvironment('DB_NAME', defaultValue: 'tailor_measurements.db');
+  static const _dbName = 'tailor_measurements.db';
   static const _dbVersion = 3;
   static const table = 'measurement_records';
 

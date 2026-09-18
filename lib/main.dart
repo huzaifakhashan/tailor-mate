@@ -1,39 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-import 'data/database_helper.dart';
-import 'models/garment_type.dart';
-import 'models/measurement_record.dart';
 import 'screens/home_screen.dart';
 import 'services/theme_controller.dart';
 
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  final db = DatabaseHelper.instance;
-  if ((await db.fetchAllRecords()).isEmpty) {
-    final now = DateTime.now();
-    final demo = <List<Object>>[
-      ['أحمد الخطيب', '0991 234 567', GarmentType.kabbiya],
-      ['محمد العلي', '0944 111 222', GarmentType.shirt],
-      ['خالد السعيد', '0933 456 789', GarmentType.pants],
-      ['يوسف الحمصي', '0955 321 654', GarmentType.pajama],
-      ['عمر الشامي', '0988 777 888', GarmentType.kabbiya],
-    ];
-    var i = 0;
-    for (final d in demo) {
-      final type = d[2] as GarmentType;
-      await db.insertRecord(MeasurementRecord(
-        fullName: d[0] as String,
-        phone: d[1] as String,
-        notes: 'عميل تجريبي',
-        measurements: {
-          type: {for (final f in type.fields) f.key: 40.0 + f.key.length * 3},
-        },
-        createdAt: now.subtract(Duration(days: i)),
-        updatedAt: now.subtract(Duration(days: i++)),
-      ));
-    }
-  }
+void main() {
   runApp(const TailorApp());
 }
 
