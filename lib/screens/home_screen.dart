@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart' hide TextDirection;
+import 'package:url_launcher/url_launcher.dart';
 
 import '../data/database_helper.dart';
 import '../models/garment_type.dart';
@@ -111,35 +113,217 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  Future<void> _openFromDrawer(Widget screen) async {
+    Navigator.of(context).pop(); // إغلاق القائمة الجانبية
+    await Navigator.of(context).push(MaterialPageRoute(builder: (_) => screen));
+    _loadRecords();
+  }
+
+  // TODO: عدّل بيانات التواصل الحقيقية
+  static const _contactPhone = '+963 981 787 496';
+  static const _contactEmail = 'huzaifa.khashan@email.com';
+
+  static const _githubUrl = 'https://github.com/huzaifakhashan/tailor-mate';
+
+  Future<void> _copy(BuildContext context, String value) async {
+    await Clipboard.setData(ClipboardData(text: value));
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(const SnackBar(content: Text('تم النسخ')));
+  }
+
+  Future<void> _openGithub(BuildContext context) async {
+    final opened = await launchUrl(
+      Uri.parse(_githubUrl),
+      mode: LaunchMode.externalApplication,
+    );
+    if (!opened && context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('تعذر فتح الرابط')),
+      );
+    }
+  }
+
+  Widget _contactTile(
+    BuildContext context, {
+    required IconData icon,
+    required String label,
+    required String value,
+  }) {
+    return ListTile(
+      contentPadding: EdgeInsets.zero,
+      leading: Icon(icon),
+      title: Text(label),
+      // النص يُعرض من اليسار لليمين كي لا ينقلب الرقم/الإيميل داخل واجهة RTL
+      subtitle: Align(
+        alignment: AlignmentDirectional.centerStart,
+        child: Text(value, textDirection: TextDirection.ltr),
+      ),
+      trailing: IconButton(
+        icon: const Icon(Icons.copy_outlined),
+        tooltip: 'نسخ',
+        onPressed: () => _copy(context, value),
+      ),
+    );
+  }
+
+  void _showContactDialog() {
+    Navigator.of(context).pop(); // إغلاق القائمة الجانبية
+    showDialog<void>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('تواصل معنا'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _contactTile(
+              context,
+              icon: Icons.phone_outlined,
+              label: 'الهاتف',
+              value: _contactPhone,
+            ),
+            _contactTile(
+              context,
+              icon: Icons.email_outlined,
+              label: 'البريد الإلكتروني',
+              value: _contactEmail,
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('إغلاق'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showAboutDialog() {
+    Navigator.of(context).pop(); // إغلاق القائمة الجانبية
+    showDialog<void>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('من نحن'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'قياساتي تطبيق يساعد الخياط على تسجيل قياسات عملائه وتنظيمها '
+              'والبحث فيها بسهولة، مع إمكانية التصدير والاستيراد عبر ملفات إكسل.',
+            ),
+            const SizedBox(height: 12),
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: const Icon(Icons.code),
+              title: const Text('GitHub'),
+              subtitle: const Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: Text(_githubUrl, textDirection: TextDirection.ltr),
+              ),
+              trailing: IconButton(
+                icon: const Icon(Icons.copy_outlined),
+                tooltip: 'نسخ',
+                onPressed: () => _copy(context, _githubUrl),
+              ),
+              onTap: () => _openGithub(context),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('إغلاق'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDrawer(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Drawer(
+      child: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              padding: const EdgeInsets.fromLTRB(20, 28, 20, 20),
+              color: colorScheme.primaryContainer,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CircleAvatar(
+                    radius: 30,
+                    backgroundColor: colorScheme.primary,
+                    child: Icon(
+                      Icons.straighten,
+                      size: 30,
+                      color: colorScheme.onPrimary,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    'قياساتي',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      color: colorScheme.onPrimaryContainer,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    '${_allRecords.length} سجل',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: colorScheme.onPrimaryContainer,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.home_outlined),
+              title: const Text('الرئيسية'),
+              selected: true,
+              onTap: () => Navigator.of(context).pop(),
+            ),
+            ListTile(
+              leading: const Icon(Icons.delete_outline),
+              title: const Text('سلة المحذوفات'),
+              onTap: () => _openFromDrawer(const TrashScreen()),
+            ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.settings_outlined),
+              title: const Text('الإعدادات'),
+              onTap: () => _openFromDrawer(const SettingsScreen()),
+            ),
+            ListTile(
+              leading: const Icon(Icons.support_agent_outlined),
+              title: const Text('تواصل معنا'),
+              onTap: _showContactDialog,
+            ),
+            ListTile(
+              leading: const Icon(Icons.info_outline),
+              title: const Text('من نحن'),
+              onTap: _showAboutDialog,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('قياساتي'),
         centerTitle: true,
-        actions: [
-          IconButton(
-            onPressed: () async {
-              await Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const TrashScreen()),
-              );
-              _loadRecords();
-            },
-            icon: const Icon(Icons.delete_outline),
-            tooltip: 'سلة المحذوفات',
-          ),
-          IconButton(
-            onPressed: () async {
-              await Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const SettingsScreen()),
-              );
-              _loadRecords();
-            },
-            icon: const Icon(Icons.settings_outlined),
-            tooltip: 'الإعدادات',
-          ),
-        ],
       ),
+      drawer: _buildDrawer(context),
       body: Column(
         children: [
           Padding(

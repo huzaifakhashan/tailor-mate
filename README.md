@@ -1,18 +1,58 @@
-# tailor_mate
+<div dir="rtl">
 
+# قياساتي (Tailor Mate)
 
-A new Flutter project.
+تطبيق فلاتر يساعد الخياط على تسجيل قياسات عملائه وتنظيمها والبحث فيها بسهولة، بواجهة عربية كاملة (RTL) ويعمل بدون إنترنت.
 
-## Getting Started
+## لقطات من التطبيق
 
-This project is a starting point for a Flutter application.
+| الشاشة الرئيسية | القائمة الجانبية | نموذج القياسات |
+| :---: | :---: | :---: |
+| <img src="screenshots/home.png" width="220"> | <img src="screenshots/drawer.png" width="220"> | <img src="screenshots/form.png" width="220"> |
 
-A few resources to get you started if this is your first Flutter project:
+| الإعدادات | الوضع الداكن |
+| :---: | :---: |
+| <img src="screenshots/settings.png" width="220"> | <img src="screenshots/dark.png" width="220"> |
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+## المميزات
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- إضافة وتعديل سجلات العملاء مع القياسات حسب نوع القطعة.
+- بحث سريع بالاسم أو رقم الهاتف.
+- سلة محذوفات: حذف ناعم مع إمكانية الاستعادة أو التراجع.
+- تصدير واستيراد البيانات عبر ملفات إكسل (مع تجاهل السجلات المكررة).
+- وضع فاتح وداكن.
+- قائمة جانبية فيها سلة المحذوفات والإعدادات وتواصل معنا ومن نحن.
+- تخزين محلي على الجهاز باستخدام SQLite.
+
+## التقنيات المستخدمة
+
+- [Flutter](https://flutter.dev) و Material 3
+- `sqflite` لقاعدة البيانات المحلية
+- `shared_preferences` لحفظ إعدادات المظهر
+- `excel` و `file_picker` للتصدير والاستيراد
+- `url_launcher` لفتح الروابط
+- `intl` و `flutter_localizations` للتعريب
+
+## هيكل المشروع
+
+```
+lib/
+├── data/       قاعدة البيانات (database_helper.dart)
+├── models/     نماذج البيانات (سجل القياسات، أنواع القطع)
+├── screens/    الشاشات (الرئيسية، النموذج، الإعدادات، المحذوفات)
+├── services/   خدمات (إكسل، إدارة الثيم)
+└── main.dart   نقطة البداية
+```
+
+## التشغيل
+
+```bash
+flutter pub get
+flutter run
+```
+
+## الترخيص
+
+لم يُحدَّد ترخيص للمشروع بعد.
+
+</div>
