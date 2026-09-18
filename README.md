@@ -57,6 +57,4 @@ No license has been specified yet.
 
 ## 📥 Download the App
 
-👉 [Download Groupify APK V1.0.0](## 📥 Download the App
-
-👉 [Download Groupify APK V1.0.0](https://github.com/huzaifakhashan/GroupifyApp/releases/tag/v1.0.0)
+👉 [Download Groupify APK V1.0.0](https://github.com/huzaifakhashan/tailor-mate/releases/tag/v1.0.0)
